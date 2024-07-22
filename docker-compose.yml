@@ -1,0 +1,23 @@
+services:
+  foo:
+    image: chilcano/netcat:jessie
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        set -x;
+        echo "I'm running ${COMPOSE_PROJECT_NAME}";
+        while true; do nc -l -k -p 11000; done;
+    ports:
+      - target: 11000
+        published: 11000
+        protocol: tcp
+        mode: ingress
+    deploy:
+      # replicas: 3
+      # resources:
+      #   limits:
+      #     cpus: '0.50'
+      #     memory: 50M
+      restart_policy:
+        condition: on-failure
